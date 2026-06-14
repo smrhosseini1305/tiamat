@@ -30,7 +30,7 @@ export default function RootLayout({
     <html
       lang="fa"
       dir="rtl"
-      className={`dark ${vazirmatn.variable} bg-background`}
+      className={`dark ${vazirmatn.variable}`}
     >
       <body className="font-sans antialiased">
         {children}

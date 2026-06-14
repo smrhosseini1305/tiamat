@@ -14,10 +14,12 @@ import {
 import { FinalCta } from '@/components/final-cta'
 import { SiteFooter } from '@/components/site-footer'
 import { FloatingTelegram } from '@/components/floating-telegram'
+import { StarryBackground } from '@/components/starry-background'
 
 export default function Page() {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="relative min-h-screen">
+      <StarryBackground />
       <SiteHeader />
       <main>
         <HeroSection />

@@ -4,8 +4,8 @@ export function toPersianDigits(input: string | number): string {
   return String(input).replace(/[0-9]/g, (d) => map[Number(d)])
 }
 
-export const TELEGRAM_URL = 'https://t.me/tiamat'
-export const INSTAGRAM_URL = 'https://instagram.com/tiamat'
+export const TELEGRAM_URL = 'https://t.me/tiamatjourneys'
+export const INSTAGRAM_URL = 'https://instagram.com/tiamatjourneys'
 
 export type ExperienceCategory = 'سفرها' | 'کارگاه نجوم' | 'یوگا و تنفس' | 'رصد شب'
 
