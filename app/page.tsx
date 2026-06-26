@@ -24,7 +24,8 @@ import {
 } from '@/lib/data'
 import type { Metadata } from 'next'
 
-export const revalidate = 60
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
 
 const TIAMAT_HOMEPAGE_QUERY = `*[_type == "homepage"][0]{
   heroEyebrow,
@@ -93,7 +94,14 @@ const experienceTypeLabels: Record<string, ExperienceCategory> = {
 
 async function getHomepageData() {
   try {
-    return await client.fetch<HomepageData | null>(TIAMAT_HOMEPAGE_QUERY)
+    return await client.fetch<HomepageData | null>(
+      TIAMAT_HOMEPAGE_QUERY,
+      {},
+      {
+        cache: 'no-store',
+        next: { revalidate: 0 },
+      },
+    )
   } catch (error) {
     console.error('Failed to fetch TIAMAT homepage content from Sanity:', error)
     return null
