@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { Calendar, Clock, MapPin, Signal, Users } from 'lucide-react'
-import { experiences, filters } from '@/lib/data'
+import { experiences, filters, type Experience } from '@/lib/data'
 import { cn } from '@/lib/utils'
 
 const categoryColors: Record<string, string> = {
@@ -12,10 +12,25 @@ const categoryColors: Record<string, string> = {
   'رصد شب': 'bg-primary/15 text-primary',
 }
 
-export function ExperiencesSection() {
-  const [active, setActive] = useState<(typeof filters)[number]>('همه')
+type ExperiencesSectionProps = {
+  sectionTitle?: string
+  sectionSubtitle?: string
+  items?: Experience[]
+}
 
-  const visible = experiences.filter(
+export function ExperiencesSection({
+  sectionTitle = 'برنامه‌های پیش رو',
+  sectionSubtitle = 'تجربه‌ای را انتخاب کن که با ریتم این روزهایت هماهنگ است؛ از رصد آرام تا کارگاه‌های نجوم.',
+  items,
+}: ExperiencesSectionProps) {
+  const visibleExperiences = items && items.length > 0 ? items : experiences
+  const visibleFilters = [
+    'همه',
+    ...Array.from(new Set(visibleExperiences.map((item) => item.category))),
+  ]
+  const [active, setActive] = useState<string>('همه')
+
+  const visible = visibleExperiences.filter(
     (e) => active === 'همه' || e.category === active,
   )
 
@@ -24,17 +39,16 @@ export function ExperiencesSection() {
       <div className="mx-auto max-w-6xl px-4 md:px-6">
         <div className="text-center">
           <h2 className="text-balance text-3xl font-bold text-foreground md:text-4xl">
-            برنامه‌های پیش رو
+            {sectionTitle}
           </h2>
           <p className="mx-auto mt-4 max-w-xl text-pretty leading-relaxed text-muted-foreground">
-            تجربه‌ای را انتخاب کن که با ریتم این روزهایت هماهنگ است؛ از رصد آرام
-            تا کارگاه‌های نجوم.
+            {sectionSubtitle}
           </p>
         </div>
 
         {/* Filters */}
         <div className="mt-8 flex flex-wrap justify-center gap-2">
-          {filters.map((filter) => (
+          {(visibleFilters.length > 1 ? visibleFilters : [...filters]).map((filter) => (
             <button
               key={filter}
               type="button"
@@ -62,7 +76,7 @@ export function ExperiencesSection() {
                 <span
                   className={cn(
                     'rounded-full px-3 py-1 text-xs font-medium',
-                    categoryColors[exp.category],
+                    categoryColors[exp.category] ?? 'bg-primary/15 text-primary',
                   )}
                 >
                   {exp.category}

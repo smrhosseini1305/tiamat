@@ -14,7 +14,23 @@ const navLinks = [
   { label: 'تماس', href: '#contact' },
 ]
 
-export function SiteHeader() {
+type SiteHeaderProps = {
+  logoText?: string
+  logoSecondaryText?: string
+  primaryButtonText?: string
+  primaryButtonHref?: string
+  telegramText?: string
+  telegramHref?: string
+}
+
+export function SiteHeader({
+  logoText = 'TIAMAT',
+  logoSecondaryText = 'تیامات',
+  primaryButtonText = 'مشاهده برنامه‌ها',
+  primaryButtonHref = '#experiences',
+  telegramText = 'تلگرام',
+  telegramHref = TELEGRAM_URL,
+}: SiteHeaderProps) {
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
 
@@ -36,11 +52,19 @@ export function SiteHeader() {
     >
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-4 md:h-20 md:px-6">
         <a href="#" className="flex items-center gap-2 font-semibold">
-          <span className="text-lg tracking-tight text-primary md:text-xl">
-            TIAMAT
-          </span>
-          <span className="text-sm text-muted-foreground">/</span>
-          <span className="text-lg text-foreground md:text-xl">تیامات</span>
+          {logoText && (
+            <span className="text-lg tracking-tight text-primary md:text-xl">
+              {logoText}
+            </span>
+          )}
+          {logoText && logoSecondaryText && (
+            <span className="text-sm text-muted-foreground">/</span>
+          )}
+          {logoSecondaryText && (
+            <span className="text-lg text-foreground md:text-xl">
+              {logoSecondaryText}
+            </span>
+          )}
         </a>
 
         <nav className="hidden items-center gap-7 lg:flex">
@@ -57,19 +81,19 @@ export function SiteHeader() {
 
         <div className="flex items-center gap-2">
           <a
-            href={TELEGRAM_URL}
+            href={telegramHref}
             target="_blank"
             rel="noopener noreferrer"
             className="hidden items-center gap-1.5 rounded-full px-3 py-1.5 text-sm text-muted-foreground transition-colors hover:text-primary sm:flex"
           >
             <Send className="size-4" />
-            تلگرام
+            {telegramText}
           </a>
           <a
-            href="#experiences"
+            href={primaryButtonHref}
             className="hidden items-center justify-center rounded-full bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90 sm:inline-flex"
           >
-            مشاهده برنامه‌ها
+            {primaryButtonText}
           </a>
 
           <button
@@ -97,11 +121,11 @@ export function SiteHeader() {
               </a>
             ))}
             <a
-              href="#experiences"
+              href={primaryButtonHref}
               onClick={() => setOpen(false)}
               className="mt-2 inline-flex items-center justify-center rounded-full bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
             >
-              مشاهده برنامه‌ها
+              {primaryButtonText}
             </a>
           </nav>
         </div>

@@ -8,7 +8,31 @@ const icons: Record<string, LucideIcon> = {
   Compass,
 }
 
-export function OfferingsSection() {
+type Offering = {
+  title?: string
+  description?: string
+}
+
+type OfferingsSectionProps = {
+  sectionTitle?: string
+  sectionSubtitle?: string
+  items?: Offering[]
+}
+
+export function OfferingsSection({
+  sectionTitle = 'تیامات چه تجربه‌ای می‌سازد؟',
+  sectionSubtitle = 'ترکیبی از کیهانِ بیرون و آگاهیِ درون؛ جایی که علم، طبیعت و آرامش به هم می‌رسند.',
+  items,
+}: OfferingsSectionProps) {
+  const visibleOfferings =
+    items && items.length > 0
+      ? items.map((item, index) => ({
+          icon: offerings[index]?.icon ?? 'Stars',
+          title: item.title || offerings[index]?.title || '',
+          description: item.description || offerings[index]?.description || '',
+        }))
+      : offerings
+
   return (
     <section
       id="about"
@@ -18,16 +42,15 @@ export function OfferingsSection() {
       <div className="relative mx-auto max-w-6xl px-4 md:px-6">
         <div className="text-center">
           <h2 className="text-balance text-3xl font-bold text-foreground md:text-4xl">
-            تیامات چه تجربه‌ای می‌سازد؟
+            {sectionTitle}
           </h2>
           <p className="mx-auto mt-4 max-w-2xl text-pretty leading-relaxed text-muted-foreground">
-            ترکیبی از کیهانِ بیرون و آگاهیِ درون؛ جایی که علم، طبیعت و آرامش به
-            هم می‌رسند.
+            {sectionSubtitle}
           </p>
         </div>
 
         <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {offerings.map((item) => {
+          {visibleOfferings.map((item) => {
             const Icon = icons[item.icon]
             return (
               <div

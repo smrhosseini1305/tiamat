@@ -1,4 +1,4 @@
-import { Camera, Send } from 'lucide-react'
+import { Camera, Mail, Send } from 'lucide-react'
 import { INSTAGRAM_URL, TELEGRAM_URL, toPersianDigits } from '@/lib/data'
 
 const footerLinks = [
@@ -10,27 +10,71 @@ const footerLinks = [
   { label: 'تماس', href: '#contact' },
 ]
 
-export function SiteFooter() {
+type FooterLink = {
+  label: string
+  href: string
+}
+
+type SiteFooterProps = {
+  companyName?: string
+  brandText?: string
+  shortText?: string
+  linksHeading?: string
+  links?: FooterLink[]
+  contactHeading?: string
+  telegramHref?: string
+  telegramAriaLabel?: string
+  instagramHref?: string
+  instagramAriaLabel?: string
+  contactEmail?: string
+  emailAriaLabel?: string
+  copyrightYear?: string
+  copyrightText?: string
+}
+
+export function SiteFooter({
+  companyName = 'TIAMAT',
+  brandText = 'تیامات',
+  shortText = 'میان آسمان و بدن؛ سفرهایی برای دیدن ستاره‌ها، شنیدن سکوت و بازگشت به ریتم طبیعت.',
+  linksHeading = 'پیوندها',
+  links = footerLinks,
+  contactHeading = 'در ارتباط باشید',
+  telegramHref = TELEGRAM_URL,
+  telegramAriaLabel = 'تلگرام تیامات',
+  instagramHref = INSTAGRAM_URL,
+  instagramAriaLabel = 'اینستاگرام تیامات',
+  contactEmail,
+  emailAriaLabel = 'ایمیل تیامات',
+  copyrightYear = toPersianDigits(1404),
+  copyrightText = 'تیامات — تمام حقوق محفوظ است.',
+}: SiteFooterProps) {
+  const emailHref = contactEmail ? `mailto:${contactEmail}` : undefined
+
   return (
     <footer className="border-t border-border bg-cosmic/40">
       <div className="mx-auto max-w-6xl px-4 py-12 md:px-6">
         <div className="grid gap-8 md:grid-cols-3">
           <div>
             <div className="flex items-center gap-2 font-semibold">
-              <span className="text-lg text-primary">TIAMAT</span>
-              <span className="text-sm text-muted-foreground">/</span>
-              <span className="text-lg text-foreground">تیامات</span>
+              {companyName && (
+                <span className="text-lg text-primary">{companyName}</span>
+              )}
+              {companyName && brandText && (
+                <span className="text-sm text-muted-foreground">/</span>
+              )}
+              {brandText && (
+                <span className="text-lg text-foreground">{brandText}</span>
+              )}
             </div>
             <p className="mt-4 max-w-xs text-pretty text-sm leading-relaxed text-muted-foreground">
-              میان آسمان و بدن؛ سفرهایی برای دیدن ستاره‌ها، شنیدن سکوت و بازگشت
-              به ریتم طبیعت.
+              {shortText}
             </p>
           </div>
 
           <nav className="md:justify-self-center">
-            <h3 className="text-sm font-bold text-foreground">پیوندها</h3>
+            <h3 className="text-sm font-bold text-foreground">{linksHeading}</h3>
             <ul className="mt-4 space-y-2.5">
-              {footerLinks.map((link) => (
+              {links.map((link) => (
                 <li key={link.href}>
                   <a
                     href={link.href}
@@ -44,32 +88,41 @@ export function SiteFooter() {
           </nav>
 
           <div className="md:justify-self-end">
-            <h3 className="text-sm font-bold text-foreground">در ارتباط باشید</h3>
+            <h3 className="text-sm font-bold text-foreground">{contactHeading}</h3>
             <div className="mt-4 flex gap-3">
               <a
-                href={TELEGRAM_URL}
+                href={telegramHref}
                 target="_blank"
                 rel="noopener noreferrer"
-                aria-label="تلگرام تیامات"
+                aria-label={telegramAriaLabel}
                 className="inline-flex size-10 items-center justify-center rounded-full border border-border text-muted-foreground transition-colors hover:border-primary/50 hover:text-primary"
               >
                 <Send className="size-5" />
               </a>
               <a
-                href={INSTAGRAM_URL}
+                href={instagramHref}
                 target="_blank"
                 rel="noopener noreferrer"
-                aria-label="اینستاگرام تیامات"
+                aria-label={instagramAriaLabel}
                 className="inline-flex size-10 items-center justify-center rounded-full border border-border text-muted-foreground transition-colors hover:border-primary/50 hover:text-primary"
               >
                 <Camera className="size-5" />
               </a>
+              {emailHref && (
+                <a
+                  href={emailHref}
+                  aria-label={emailAriaLabel}
+                  className="inline-flex size-10 items-center justify-center rounded-full border border-border text-muted-foreground transition-colors hover:border-primary/50 hover:text-primary"
+                >
+                  <Mail className="size-5" />
+                </a>
+              )}
             </div>
           </div>
         </div>
 
         <div className="mt-10 border-t border-border pt-6 text-center text-xs text-muted-foreground">
-          © {toPersianDigits(1404)} تیامات — تمام حقوق محفوظ است.
+          © {copyrightYear} {copyrightText}
         </div>
       </div>
     </footer>
