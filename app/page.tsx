@@ -27,7 +27,7 @@ import type { Metadata } from 'next'
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
 
-const TIAMAT_HOMEPAGE_QUERY = `*[_type == "homepage"][0]{
+const TIAMAT_HOMEPAGE_QUERY = `*[_type == "homepage" && _id == "homepage"][0]{
   heroEyebrow,
   heroTitle,
   heroSubtitle,

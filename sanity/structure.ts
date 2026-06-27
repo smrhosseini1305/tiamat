@@ -1,7 +1,22 @@
 import type {StructureResolver} from 'sanity/structure'
 
-// https://www.sanity.io/docs/structure-builder-cheat-sheet
+const singletonTypes = new Set(['homepage'])
+
 export const structure: StructureResolver = (S) =>
   S.list()
     .title('Content')
-    .items(S.documentTypeListItems())
+    .items([
+      S.listItem()
+        .title('TIAMAT Homepage')
+        .id('homepage')
+        .schemaType('homepage')
+        .child(
+          S.document()
+            .schemaType('homepage')
+            .documentId('homepage'),
+        ),
+      ...S.documentTypeListItems().filter((listItem) => {
+        const id = listItem.getId()
+        return id ? !singletonTypes.has(id) : true
+      }),
+    ])
