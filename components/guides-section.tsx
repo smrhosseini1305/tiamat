@@ -1,22 +1,50 @@
 import Image from 'next/image'
 import { guides } from '@/lib/data'
 
-export function GuidesSection() {
+type GuideItem = {
+  name: string
+  role: string
+  image: string
+  bio: string
+  tags: string[]
+}
+
+type GuidesSectionProps = {
+  sectionTitle?: string
+  sectionSubtitle?: string
+  items?: GuideItem[]
+}
+
+export function GuidesSection({
+  sectionTitle = 'راهنماها و همراهان',
+  sectionSubtitle = 'کسانی که آسمان، بدن و طبیعت را می‌شناسند و سفر را آرام و امن همراهی می‌کنند.',
+  items,
+}: GuidesSectionProps) {
+  const visibleGuides =
+    items && items.length > 0
+      ? items
+      : guides.map((guide) => ({
+          name: guide.name,
+          role: guide.role,
+          image: guide.image,
+          bio: guide.bio,
+          tags: [...guide.tags],
+        }))
+
   return (
     <section id="guides" className="scroll-mt-20 py-16 md:py-24">
       <div className="mx-auto max-w-6xl px-4 md:px-6">
         <div className="text-center">
           <h2 className="text-balance text-3xl font-bold text-foreground md:text-4xl">
-            راهنماها و همراهان
+            {sectionTitle}
           </h2>
           <p className="mx-auto mt-4 max-w-xl text-pretty leading-relaxed text-muted-foreground">
-            کسانی که آسمان، بدن و طبیعت را می‌شناسند و سفر را آرام و امن همراهی
-            می‌کنند.
+            {sectionSubtitle}
           </p>
         </div>
 
         <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {guides.map((guide) => (
+          {visibleGuides.map((guide) => (
             <div
               key={guide.name}
               className="group overflow-hidden rounded-3xl border border-border bg-card transition-all duration-300 hover:-translate-y-1 hover:border-primary/40"

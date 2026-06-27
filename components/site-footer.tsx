@@ -45,7 +45,7 @@ export function SiteFooter({
   instagramAriaLabel = 'اینستاگرام تیامات',
   contactEmail,
   emailAriaLabel = 'ایمیل تیامات',
-  copyrightYear = toPersianDigits(1404),
+  copyrightYear = toPersianDigits(1405),
   copyrightText = 'تیامات — تمام حقوق محفوظ است.',
 }: SiteFooterProps) {
   const emailHref = contactEmail ? `mailto:${contactEmail}` : undefined

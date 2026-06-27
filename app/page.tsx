@@ -16,7 +16,12 @@ import { SiteFooter } from '@/components/site-footer'
 import { FloatingTelegram } from '@/components/floating-telegram'
 import { StarryBackground } from '@/components/starry-background'
 import { client } from '@/sanity/lib/client'
+import { urlFor } from '@/sanity/lib/image'
 import {
+  experiences as fallbackExperiences,
+  guides as fallbackGuides,
+  gallery as fallbackGallery,
+  testimonials as fallbackTestimonials,
   INSTAGRAM_URL,
   TELEGRAM_URL,
   type Experience,
@@ -28,61 +33,121 @@ export const dynamic = 'force-dynamic'
 export const revalidate = 0
 
 const TIAMAT_HOMEPAGE_QUERY = `*[_type == "homepage" && _id == "homepage"][0]{
-  heroEyebrow,
+  headerTitle,
   heroTitle,
   heroSubtitle,
-  primaryCtaText,
-  primaryCtaHref,
-  secondaryCtaText,
-  secondaryCtaHref,
-  aboutTitle,
-  aboutText,
-  offerings,
-  experiences,
-  faq,
+  experiencesTitle,
+  experiencesDescription,
+  experiences[]{
+    title,
+    type,
+    location,
+    dateText,
+    duration,
+    capacity,
+    description,
+    level
+  },
+  guidesTitle,
+  guidesDescription,
+  guides[]{
+    name,
+    role,
+    image,
+    bio,
+    tags
+  },
+  galleryTitle,
+  galleryDescription,
+  gallery[]{
+    image,
+    caption,
+    alt
+  },
+  testimonialsTitle,
+  testimonialsDescription,
+  testimonials[]{
+    name,
+    role,
+    text
+  },
+  footerTitle,
+  footerDescription,
   telegramUrl,
-  instagramUrl,
-  contactEmail,
-  seoTitle,
-  seoDescription
+  instagramUrl
 }`
-
-type HomepageOffering = {
-  title?: string
-  description?: string
-}
 
 type HomepageExperience = {
   title?: string
   type?: string
   location?: string
   dateText?: string
+  duration?: string
+  capacity?: string
   description?: string
+  level?: string
 }
 
-type HomepageFaq = {
-  question?: string
-  answer?: string
+type HomepageGuide = {
+  name?: string
+  role?: string
+  image?: unknown
+  bio?: string
+  tags?: string[]
+}
+
+type HomepageGalleryItem = {
+  image?: unknown
+  caption?: string
+  alt?: string
+}
+
+type HomepageTestimonial = {
+  name?: string
+  role?: string
+  text?: string
 }
 
 type HomepageData = {
-  heroEyebrow?: string
+  headerTitle?: string
   heroTitle?: string
   heroSubtitle?: string
-  primaryCtaText?: string
-  primaryCtaHref?: string
-  secondaryCtaText?: string
-  secondaryCtaHref?: string
-  aboutTitle?: string
-  aboutText?: string
-  offerings?: HomepageOffering[]
+  experiencesTitle?: string
+  experiencesDescription?: string
   experiences?: HomepageExperience[]
-  faq?: HomepageFaq[]
+  guidesTitle?: string
+  guidesDescription?: string
+  guides?: HomepageGuide[]
+  galleryTitle?: string
+  galleryDescription?: string
+  gallery?: HomepageGalleryItem[]
+  testimonialsTitle?: string
+  testimonialsDescription?: string
+  testimonials?: HomepageTestimonial[]
+  footerTitle?: string
+  footerDescription?: string
   telegramUrl?: string
   instagramUrl?: string
-  contactEmail?: string
-  seoTitle?: string
-  seoDescription?: string
+}
+
+type GuideCard = {
+  name: string
+  role: string
+  image: string
+  bio: string
+  tags: string[]
+}
+
+type GalleryCard = {
+  image: string
+  caption: string
+  alt: string
+}
+
+type TestimonialCard = {
+  name: string
+  role: string
+  text: string
 }
 
 const experienceTypeLabels: Record<string, ExperienceCategory> = {
@@ -108,22 +173,6 @@ async function getHomepageData() {
   }
 }
 
-function cleanOfferings(items?: HomepageOffering[]) {
-  const cleaned = items?.filter((item) => item.title || item.description)
-  return cleaned && cleaned.length > 0 ? cleaned : undefined
-}
-
-function cleanFaq(items?: HomepageFaq[]) {
-  const cleaned = items
-    ?.filter((item) => item.question && item.answer)
-    .map((item) => ({
-      question: item.question || '',
-      answer: item.answer || '',
-    }))
-
-  return cleaned && cleaned.length > 0 ? cleaned : undefined
-}
-
 function cleanExperiences(items?: HomepageExperience[]): Experience[] | undefined {
   const cleaned = items
     ?.filter((item) => item.title || item.description)
@@ -131,17 +180,74 @@ function cleanExperiences(items?: HomepageExperience[]): Experience[] | undefine
       const category = item.type
         ? experienceTypeLabels[item.type] ?? 'سفرها'
         : 'سفرها'
+      const fallback = fallbackExperiences[index % fallbackExperiences.length]
 
       return {
         id: `${item.type || 'experience'}-${index}`,
-        title: item.title || 'تجربه تیامات',
+        title: item.title || fallback.title,
         category,
-        date: item.dateText || 'به‌زودی',
-        location: item.location || 'اعلام می‌شود',
-        duration: 'اعلام می‌شود',
-        capacity: 'اعلام می‌شود',
-        description: item.description || '',
-        level: 'مبتدی',
+        date: item.dateText || fallback.date,
+        location: item.location || fallback.location,
+        duration: item.duration || fallback.duration,
+        capacity: item.capacity || fallback.capacity,
+        description: item.description || fallback.description,
+        level: item.level || fallback.level,
+      }
+    })
+
+  return cleaned && cleaned.length > 0 ? cleaned : undefined
+}
+
+function cleanGuides(items?: HomepageGuide[]): GuideCard[] | undefined {
+  const cleaned = items
+    ?.filter((item) => item.name || item.bio)
+    .map((item, index) => {
+      const fallback = fallbackGuides[index % fallbackGuides.length]
+
+      return {
+        name: item.name || fallback.name,
+        role: item.role || fallback.role,
+        image:
+          item.image != null
+            ? urlFor(item.image as any).width(900).url()
+            : fallback.image,
+        bio: item.bio || fallback.bio,
+        tags: item.tags && item.tags.length > 0 ? item.tags : [...fallback.tags],
+      }
+    })
+
+  return cleaned && cleaned.length > 0 ? cleaned : undefined
+}
+
+function cleanGallery(items?: HomepageGalleryItem[]): GalleryCard[] | undefined {
+  const cleaned = items
+    ?.filter((item) => item.caption || item.alt || item.image)
+    .map((item, index) => {
+      const fallback = fallbackGallery[index % fallbackGallery.length]
+
+      return {
+        image:
+          item.image != null
+            ? urlFor(item.image as any).width(1400).url()
+            : fallback.src,
+        caption: item.caption || fallback.caption,
+        alt: item.alt || item.caption || fallback.caption,
+      }
+    })
+
+  return cleaned && cleaned.length > 0 ? cleaned : undefined
+}
+
+function cleanTestimonials(items?: HomepageTestimonial[]): TestimonialCard[] | undefined {
+  const cleaned = items
+    ?.filter((item) => item.name || item.text)
+    .map((item, index) => {
+      const fallback = fallbackTestimonials[index % fallbackTestimonials.length]
+
+      return {
+        name: item.name || fallback.name,
+        role: item.role || fallback.role,
+        text: item.text || fallback.text,
       }
     })
 
@@ -149,12 +255,9 @@ function cleanExperiences(items?: HomepageExperience[]): Experience[] | undefine
 }
 
 export async function generateMetadata(): Promise<Metadata> {
-  const data = await getHomepageData()
-
   return {
-    title: data?.seoTitle || 'تیامات | سفرهایی میان آسمان و بدن',
+    title: 'تیامات | سفرهایی میان آسمان و بدن',
     description:
-      data?.seoDescription ||
       'تیامات تجربه‌هایی برای دیدن آسمان، فهمیدن ریتم طبیعت و بازگشت به سکوت درون می‌سازد؛ با نجوم مقدماتی، رصد آسمان شب، یوگا، تنفس و سفرهای آگاهانه.',
   }
 }
@@ -164,55 +267,70 @@ export default async function Page() {
   const telegramUrl = data?.telegramUrl || TELEGRAM_URL
   const instagramUrl = data?.instagramUrl || INSTAGRAM_URL
   const experiences = cleanExperiences(data?.experiences)
-  const firstExperience = experiences?.[0]
+  const guides = cleanGuides(data?.guides)
+  const gallery = cleanGallery(data?.gallery)
+  const testimonials = cleanTestimonials(data?.testimonials)
+  const firstExperience = experiences?.[0] ?? fallbackExperiences[0]
 
   return (
     <div className="relative min-h-screen">
       <StarryBackground />
       <SiteHeader
-        primaryButtonText={data?.primaryCtaText || 'مشاهده برنامه‌ها'}
-        primaryButtonHref={data?.primaryCtaHref || '#experiences'}
+        logoText={data?.headerTitle || 'TIAMAT'}
         telegramHref={telegramUrl}
       />
       <main>
         <HeroSection
-          eyebrow={data?.heroEyebrow || 'تیامات / TIAMAT'}
           title={data?.heroTitle || 'سفرهایی میان آسمان و بدن'}
           subtitle={
             data?.heroSubtitle ||
             'تیامات تجربه‌هایی برای دیدن آسمان، فهمیدن ریتم طبیعت، و بازگشت به سکوت درون می‌سازد؛ با نجوم مقدماتی، رصد آسمان شب، یوگا، تنفس و سفرهای آگاهانه.'
           }
-          primaryButtonText={data?.primaryCtaText || 'برنامه‌های پیش رو'}
-          primaryButtonHref={data?.primaryCtaHref || '#experiences'}
-          secondaryButtonText={data?.secondaryCtaText || 'عضویت در کانال تلگرام'}
-          secondaryButtonHref={data?.secondaryCtaHref || telegramUrl}
-          cardTitle={firstExperience?.title}
-          cardSubtitle={firstExperience?.description}
-          cardDate={firstExperience?.date}
-          cardLocation={firstExperience?.location}
+          cardTitle={firstExperience.title}
+          cardSubtitle={firstExperience.description}
+          cardDate={firstExperience.date}
+          cardLocation={firstExperience.location}
+          cardCapacity={firstExperience.capacity}
+          secondaryButtonHref={telegramUrl}
         />
-        <ExperiencesSection items={experiences} />
-        <OfferingsSection
-          sectionTitle={data?.aboutTitle}
-          sectionSubtitle={data?.aboutText}
-          items={cleanOfferings(data?.offerings)}
+        <ExperiencesSection
+          sectionTitle={data?.experiencesTitle}
+          sectionSubtitle={data?.experiencesDescription}
+          items={experiences}
         />
+        <OfferingsSection />
         <JourneySection />
         <FeaturedRetreat />
-        <GuidesSection />
-        <GallerySection />
-        <TestimonialsSection />
+        <GuidesSection
+          sectionTitle={data?.guidesTitle}
+          sectionSubtitle={data?.guidesDescription}
+          items={guides}
+        />
+        <GallerySection
+          sectionTitle={data?.galleryTitle}
+          sectionSubtitle={data?.galleryDescription}
+          items={gallery}
+        />
+        <TestimonialsSection
+          sectionTitle={data?.testimonialsTitle}
+          sectionSubtitle={data?.testimonialsDescription}
+          items={testimonials}
+        />
         <PracticalNotesSection />
-        <FaqSection items={cleanFaq(data?.faq)} />
+        <FaqSection />
         <FinalCta
           primaryButtonHref={telegramUrl}
           secondaryButtonHref={telegramUrl}
         />
       </main>
       <SiteFooter
+        companyName={data?.footerTitle || 'TIAMAT'}
+        shortText={
+          data?.footerDescription ||
+          'میان آسمان و بدن؛ سفرهایی برای دیدن ستاره‌ها، شنیدن سکوت و بازگشت به ریتم طبیعت.'
+        }
         telegramHref={telegramUrl}
         instagramHref={instagramUrl}
-        contactEmail={data?.contactEmail}
       />
       <FloatingTelegram href={telegramUrl} />
     </div>

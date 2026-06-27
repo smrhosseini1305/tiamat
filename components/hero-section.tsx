@@ -1,4 +1,3 @@
-import Image from 'next/image'
 import {
   Calendar,
   MapPin,
@@ -19,7 +18,6 @@ const badges = [
 ]
 
 type HeroSectionProps = {
-  eyebrow?: string
   title?: string
   subtitle?: string
   primaryButtonText?: string
@@ -34,11 +32,9 @@ type HeroSectionProps = {
   cardCapacity?: string
   cardButtonText?: string
   cardButtonHref?: string
-  imageSrc?: string
 }
 
 export function HeroSection({
-  eyebrow = 'تیامات / TIAMAT',
   title = 'سفرهایی میان آسمان و بدن',
   subtitle = 'تیامات تجربه‌هایی برای دیدن آسمان، فهمیدن ریتم طبیعت، و بازگشت به سکوت درون می‌سازد؛ با نجوم مقدماتی، رصد آسمان شب، یوگا، تنفس و سفرهای آگاهانه.',
   primaryButtonText = 'برنامه‌های پیش رو',
@@ -53,30 +49,14 @@ export function HeroSection({
   cardCapacity = '۱۸ نفر',
   cardButtonText = 'جزئیات و ثبت‌نام',
   cardButtonHref = '#experiences',
-  imageSrc = '/images/hero-sky.png',
 }: HeroSectionProps) {
   return (
     <section className="relative overflow-hidden">
-      {/* Background image + cosmic overlays */}
-      <div className="absolute inset-0 -z-20">
-        <Image
-          src={imageSrc}
-          alt=""
-          fill
-          priority
-          className="object-cover object-center opacity-60"
-        />
-      </div>
-      <div className="absolute inset-0 -z-10 bg-gradient-to-b from-background/70 via-background/80 to-background" />
-      <div className="star-field absolute inset-0 -z-10 animate-twinkle opacity-70" />
+      <div className="star-field-dense absolute inset-0 -z-10 opacity-40" />
 
       <div className="mx-auto grid max-w-6xl gap-12 px-4 pt-28 pb-16 md:px-6 md:pt-36 md:pb-24 lg:grid-cols-[1.4fr_1fr] lg:items-center lg:gap-10">
         {/* Copy */}
         <div className="text-center lg:text-right">
-          <span className="inline-flex items-center gap-2 rounded-full border border-border bg-card/60 px-4 py-1.5 text-sm text-primary backdrop-blur-sm">
-            <Sparkles className="size-4" />
-            {eyebrow}
-          </span>
 
           <h1 className="mt-6 text-balance text-4xl font-bold leading-tight text-foreground md:text-6xl">
             {title}

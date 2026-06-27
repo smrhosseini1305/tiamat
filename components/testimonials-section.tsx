@@ -1,22 +1,47 @@
 import { Quote } from 'lucide-react'
 import { testimonials } from '@/lib/data'
 
-export function TestimonialsSection() {
+type TestimonialItem = {
+  name: string
+  role: string
+  text: string
+}
+
+type TestimonialsSectionProps = {
+  sectionTitle?: string
+  sectionSubtitle?: string
+  items?: TestimonialItem[]
+}
+
+export function TestimonialsSection({
+  sectionTitle = 'تجربه همراهان',
+  sectionSubtitle = 'چند روایت کوتاه از کسانی که شبی را با تیامات زیر آسمان گذرانده‌اند.',
+  items,
+}: TestimonialsSectionProps) {
+  const visibleTestimonials =
+    items && items.length > 0
+      ? items
+      : testimonials.map((t) => ({
+          name: t.name,
+          role: t.role,
+          text: t.text,
+        }))
+
   return (
     <section className="relative overflow-hidden py-16 md:py-24">
       <div className="star-field-dense pointer-events-none absolute inset-0 opacity-25" />
       <div className="relative mx-auto max-w-6xl px-4 md:px-6">
         <div className="text-center">
           <h2 className="text-balance text-3xl font-bold text-foreground md:text-4xl">
-            تجربه همراهان
+            {sectionTitle}
           </h2>
           <p className="mx-auto mt-4 max-w-xl text-pretty leading-relaxed text-muted-foreground">
-            چند روایت کوتاه از کسانی که شبی را با تیامات زیر آسمان گذرانده‌اند.
+            {sectionSubtitle}
           </p>
         </div>
 
         <div className="mt-12 grid gap-6 md:grid-cols-3">
-          {testimonials.map((t) => (
+          {visibleTestimonials.map((t) => (
             <figure
               key={t.name}
               className="flex flex-col rounded-3xl border border-border bg-card p-6"

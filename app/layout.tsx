@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   title: 'تیامات | سفرهایی میان آسمان و بدن',
   description:
     'تیامات تجربه‌هایی برای دیدن آسمان، فهمیدن ریتم طبیعت و بازگشت به سکوت درون می‌سازد؛ با نجوم مقدماتی، رصد آسمان شب، یوگا، تنفس و سفرهای آگاهانه.',
-  generator: 'v0.app',
+  generator: 'movawerk.de',
 }
 
 export const viewport: Viewport = {

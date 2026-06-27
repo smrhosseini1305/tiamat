@@ -6,79 +6,40 @@ export const homepage = defineType({
   type: 'document',
   fields: [
     defineField({
-      name: 'heroEyebrow',
-      title: 'Hero Eyebrow',
+      name: 'headerTitle',
+      title: 'Header Title',
       type: 'string',
-      initialValue: 'تیامات / TIAMAT',
+      initialValue: 'TIAMAT',
     }),
     defineField({
       name: 'heroTitle',
       title: 'Hero Title',
       type: 'string',
+      initialValue: 'سفرهایی میان آسمان و بدن',
     }),
     defineField({
       name: 'heroSubtitle',
-      title: 'Hero Subtitle',
+      title: 'Hero Description',
       type: 'text',
+      initialValue:
+        'تیامات تجربه‌هایی برای دیدن آسمان، فهمیدن ریتم طبیعت، و بازگشت به سکوت درون می‌سازد؛ با نجوم مقدماتی، رصد آسمان شب، یوگا، تنفس و سفرهای آگاهانه.',
     }),
     defineField({
-      name: 'primaryCtaText',
-      title: 'Primary CTA Text',
+      name: 'experiencesTitle',
+      title: 'Experiences Title',
       type: 'string',
+      initialValue: 'برنامه‌های پیش رو',
     }),
     defineField({
-      name: 'primaryCtaHref',
-      title: 'Primary CTA Link',
-      type: 'string',
-    }),
-    defineField({
-      name: 'secondaryCtaText',
-      title: 'Secondary CTA Text',
-      type: 'string',
-    }),
-    defineField({
-      name: 'secondaryCtaHref',
-      title: 'Secondary CTA Link',
-      type: 'string',
-    }),
-
-    defineField({
-      name: 'aboutTitle',
-      title: 'About Section Title',
-      type: 'string',
-    }),
-    defineField({
-      name: 'aboutText',
-      title: 'About Section Text',
+      name: 'experiencesDescription',
+      title: 'Experiences Description',
       type: 'text',
+      initialValue:
+        'تجربه‌ای را انتخاب کن که با ریتم این روزهایت هماهنگ است؛ از رصد آرام تا کارگاه‌های نجوم.',
     }),
-
-    defineField({
-      name: 'offerings',
-      title: 'Offerings',
-      type: 'array',
-      of: [
-        {
-          type: 'object',
-          fields: [
-            defineField({
-              name: 'title',
-              title: 'Title',
-              type: 'string',
-            }),
-            defineField({
-              name: 'description',
-              title: 'Description',
-              type: 'text',
-            }),
-          ],
-        },
-      ],
-    }),
-
     defineField({
       name: 'experiences',
-      title: 'Journeys / Workshops / Experiences',
+      title: 'Experiences',
       type: 'array',
       of: [
         {
@@ -111,66 +72,190 @@ export const homepage = defineType({
               name: 'dateText',
               title: 'Date Text',
               type: 'string',
-              description: 'Example: Summer 2026, Coming soon, or 12–14 July 2026',
+            }),
+            defineField({
+              name: 'duration',
+              title: 'Duration',
+              type: 'string',
+            }),
+            defineField({
+              name: 'capacity',
+              title: 'Capacity',
+              type: 'string',
             }),
             defineField({
               name: 'description',
               title: 'Description',
               type: 'text',
             }),
+            defineField({
+              name: 'level',
+              title: 'Level',
+              type: 'string',
+            }),
           ],
         },
       ],
     }),
-
     defineField({
-      name: 'faq',
-      title: 'FAQ',
+      name: 'guidesTitle',
+      title: 'Guides Title',
+      type: 'string',
+      initialValue: 'راهنماها و همراهان',
+    }),
+    defineField({
+      name: 'guidesDescription',
+      title: 'Guides Description',
+      type: 'text',
+      initialValue:
+        'کسانی که آسمان، بدن و طبیعت را می‌شناسند و سفر را آرام و امن همراهی می‌کنند.',
+    }),
+    defineField({
+      name: 'guides',
+      title: 'Guides',
       type: 'array',
       of: [
         {
           type: 'object',
           fields: [
             defineField({
-              name: 'question',
-              title: 'Question',
+              name: 'name',
+              title: 'Name',
               type: 'string',
             }),
             defineField({
-              name: 'answer',
-              title: 'Answer',
+              name: 'role',
+              title: 'Role',
+              type: 'string',
+            }),
+            defineField({
+              name: 'image',
+              title: 'Image',
+              type: 'image',
+              options: {
+                hotspot: true,
+              },
+            }),
+            defineField({
+              name: 'bio',
+              title: 'Bio',
+              type: 'text',
+            }),
+            defineField({
+              name: 'tags',
+              title: 'Tags',
+              type: 'array',
+              of: [{type: 'string'}],
+            }),
+          ],
+        },
+      ],
+    }),
+    defineField({
+      name: 'galleryTitle',
+      title: 'Gallery Title',
+      type: 'string',
+      initialValue: 'لحظه‌هایی از سفر',
+    }),
+    defineField({
+      name: 'galleryDescription',
+      title: 'Gallery Description',
+      type: 'text',
+      initialValue: 'تکه‌هایی از شب‌های پرستاره، سکوت طبیعت و حضورِ آرام در کنار هم.',
+    }),
+    defineField({
+      name: 'gallery',
+      title: 'Gallery',
+      type: 'array',
+      of: [
+        {
+          type: 'object',
+          fields: [
+            defineField({
+              name: 'image',
+              title: 'Image',
+              type: 'image',
+              options: {
+                hotspot: true,
+              },
+            }),
+            defineField({
+              name: 'caption',
+              title: 'Caption',
+              type: 'string',
+            }),
+            defineField({
+              name: 'alt',
+              title: 'Alt Text',
+              type: 'string',
+            }),
+          ],
+        },
+      ],
+    }),
+    defineField({
+      name: 'testimonialsTitle',
+      title: 'Testimonials Title',
+      type: 'string',
+      initialValue: 'تجربه همراهان',
+    }),
+    defineField({
+      name: 'testimonialsDescription',
+      title: 'Testimonials Description',
+      type: 'text',
+      initialValue: 'چند روایت کوتاه از کسانی که شبی را با تیامات زیر آسمان گذرانده‌اند.',
+    }),
+    defineField({
+      name: 'testimonials',
+      title: 'Testimonials',
+      type: 'array',
+      of: [
+        {
+          type: 'object',
+          fields: [
+            defineField({
+              name: 'name',
+              title: 'Name',
+              type: 'string',
+            }),
+            defineField({
+              name: 'role',
+              title: 'Role',
+              type: 'string',
+            }),
+            defineField({
+              name: 'text',
+              title: 'Text',
               type: 'text',
             }),
           ],
         },
       ],
     }),
-
+    defineField({
+      name: 'footerTitle',
+      title: 'Footer Title',
+      type: 'string',
+      initialValue: 'TIAMAT',
+    }),
+    defineField({
+      name: 'footerDescription',
+      title: 'Footer Description',
+      type: 'text',
+      initialValue:
+        'میان آسمان و بدن؛ سفرهایی برای دیدن ستاره‌ها، شنیدن سکوت و بازگشت به ریتم طبیعت.',
+    }),
     defineField({
       name: 'telegramUrl',
       title: 'Telegram URL',
       type: 'string',
+      initialValue: 'https://t.me/tiamatjourneys',
     }),
     defineField({
       name: 'instagramUrl',
       title: 'Instagram URL',
       type: 'string',
-    }),
-    defineField({
-      name: 'contactEmail',
-      title: 'Contact Email',
-      type: 'string',
-    }),
-
-    defineField({
-      name: 'seoTitle',
-      title: 'SEO Title',
-      type: 'string',
-    }),
-    defineField({
-      name: 'seoDescription',
-      title: 'SEO Description',
-      type: 'text',
+      initialValue: 'https://instagram.com/tiamatjourneys',
     }),
   ],
 })

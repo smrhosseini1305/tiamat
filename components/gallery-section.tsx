@@ -12,31 +12,56 @@ const spans = [
   '',
 ]
 
-export function GallerySection() {
+type GalleryItem = {
+  image?: string
+  caption?: string
+  alt?: string
+}
+
+type GallerySectionProps = {
+  sectionTitle?: string
+  sectionSubtitle?: string
+  items?: GalleryItem[]
+}
+
+export function GallerySection({
+  sectionTitle = 'لحظه‌هایی از سفر',
+  sectionSubtitle = 'تکه‌هایی از شب‌های پرستاره، سکوت طبیعت و حضورِ آرام در کنار هم.',
+  items,
+}: GallerySectionProps) {
+  const visibleGallery =
+    items && items.length > 0
+      ? items
+      : gallery.map((item) => ({
+          image: item.src,
+          caption: item.caption,
+          alt: item.caption,
+        }))
+
   return (
     <section className="py-16 md:py-24">
       <div className="mx-auto max-w-6xl px-4 md:px-6">
         <div className="text-center">
           <h2 className="text-balance text-3xl font-bold text-foreground md:text-4xl">
-            لحظه‌هایی از سفر
+            {sectionTitle}
           </h2>
           <p className="mx-auto mt-4 max-w-xl text-pretty leading-relaxed text-muted-foreground">
-            تکه‌هایی از شب‌های پرستاره، سکوت طبیعت و حضورِ آرام در کنار هم.
+            {sectionSubtitle}
           </p>
         </div>
 
         <div className="mt-12 grid auto-rows-[180px] grid-cols-2 gap-4 md:grid-cols-3 md:auto-rows-[200px]">
-          {gallery.map((item, i) => (
+          {visibleGallery.map((item, i) => (
             <figure
-              key={item.src}
+              key={`${item.caption || 'gallery'}-${i}`}
               className={cn(
                 'group relative overflow-hidden rounded-2xl border border-border',
-                spans[i],
+                spans[i % spans.length],
               )}
             >
               <Image
-                src={item.src}
-                alt={item.caption}
+                src={item.image || '/placeholder.jpg'}
+                alt={item.alt || item.caption || 'Gallery image'}
                 fill
                 className="object-cover transition-transform duration-500 group-hover:scale-105"
               />
