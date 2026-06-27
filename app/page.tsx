@@ -3,7 +3,6 @@ import { HeroSection } from '@/components/hero-section'
 import { ExperiencesSection } from '@/components/experiences-section'
 import { OfferingsSection } from '@/components/offerings-section'
 import { JourneySection } from '@/components/journey-section'
-import { FeaturedRetreat } from '@/components/featured-retreat'
 import { GuidesSection } from '@/components/guides-section'
 import { GallerySection } from '@/components/gallery-section'
 import { TestimonialsSection } from '@/components/testimonials-section'
@@ -300,7 +299,6 @@ export default async function Page() {
         />
         <OfferingsSection />
         <JourneySection />
-        <FeaturedRetreat />
         <GuidesSection
           sectionTitle={data?.guidesTitle}
           sectionSubtitle={data?.guidesDescription}
